@@ -21,6 +21,7 @@ import kraken.zone_outage.actions as zone_outages
 import kraken.application_outage.actions as application_outage
 import kraken.pvc.pvc_scenario as pvc_scenario
 import kraken.network_chaos.actions as network_chaos
+import kraken.disk_detach.actions as disk_detach
 import server as server
 from kraken import plugins
 
@@ -345,6 +346,14 @@ def main(cfg):
                         elif scenario_type == "network_chaos":
                             logging.info("Running Network Chaos")
                             network_chaos.run(
+                                scenarios_list,
+                                config,
+                                wait_duration
+                            )
+
+                        elif scenario_type == "disk_detach":
+                            logging.info("Running Disk Detach Scenario")
+                            disk_detach.run(
                                 scenarios_list,
                                 config,
                                 wait_duration

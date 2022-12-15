@@ -150,6 +150,42 @@ class AWS:
             )
             sys.exit(1)
 
+    def get_instance_disk(self, instance_id, disk_path):
+        return self.boto_client.describe_volumes(
+            Filters=[
+                {
+                    'Name': 'attachment.instance-id',
+                    'Values': [instance_id]
+                },
+                {
+                    'Name': 'attachment.device',
+                    'Values': [disk_path]
+                }
+            ]
+        )["Volumes"][0]["VolumeId"]
+
+    def detach_disk(self, instance_id, disk_id):
+        try:
+            self.boto_client.detach_volume(VolumeId=disk_id, InstanceId=instance_id)
+        except Exception as e:
+            logging.error( 
+                f"Failed to detach {disk_id} from {instance_id}"
+                f"{e}"
+            )
+            sys.exit(1)
+    
+    def attach_disk(self, instance_id, disk_id, path):
+        try:
+            self.boto_client.attach_volume(
+                InstanceId=instance_id,
+                Device=path,
+                VolumeId=disk_id
+            )
+        except Exception as e:
+            logging.error(
+                f"Failed to attach {disk_id} to {instance_id} at {path}"
+                f"{e}"
+            )
 
 class aws_node_scenarios(abstract_node_scenarios):
     def __init__(self):

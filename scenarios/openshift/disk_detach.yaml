@@ -1,0 +1,3 @@
+cloud_type: aws
+node_name: ip-10-0-138-128.us-west-2.compute.internal
+device_path: /dev/xvdbb
